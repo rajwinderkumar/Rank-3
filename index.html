@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#07060d" />
+  <meta name="description" content="Rank Wise — on-page SEO audit. Check title, meta, headings, images, links, robots.txt and sitemap." />
+  <title>Rank Wise</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+:root {
+  --bg: #07060d;
+  --frame: #0c0b12;
+  --card: #141221;
+  --ink: #f6f4ff;
+  --soft: #c9c2dc;
+  --muted: #8f88a6;
+  --line: rgba(255, 255, 255, 0.08);
+  --violet: #7c3aed;
+  --violet-2: #c4b5fd;
+  --warn: #f0b44a;
+  --fail: #ff7b72;
+  --pass: #5ee0a0;
+  --font: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: #3b1578;
+  color: var(--ink);
+  font-family: var(--font);
+}
+
+body {
+  min-height: 100dvh;
+  background:
+    radial-gradient(900px 520px at 50% -10%, #9b5cff 0%, transparent 55%),
+    linear-gradient(180deg, #6d28d9 0%, #2a0d55 42%, #14081f 100%);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.rw-mount {
+  width: min(1180px, calc(100% - 16px));
+  margin: 8px auto;
+  min-height: calc(100dvh - 16px);
+  background: var(--frame);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  overflow: clip;
+}
+
+.rw-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(12, 11, 18, 0.92);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(16px);
+}
+
+.rw-bar {
+  width: min(1040px, calc(100% - 28px));
+  margin: 0 auto;
+}
+
+.rw-header .rw-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 64px;
+}
+
+.rw-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.rw-mark { width: 26px; height: 26px; flex: none; }
+.rw-mark rect { fill: var(--violet); }
+.rw-mark path { fill: #fff; }
+
+.rw-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rw-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 999px;
+  color: var(--soft);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.rw-nav a:hover,
+.rw-nav a[aria-current="page"] {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.rw-cta, .rw-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #9b6bff, #6d28d9);
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  box-shadow: 0 8px 22px rgba(109, 40, 217, 0.4);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.rw-btn { width: 100%; min-height: 48px; font-size: 15px; }
+.rw-cta:hover, .rw-btn:hover { filter: brightness(1.06); }
+.rw-btn:disabled, .rw-chip:disabled { opacity: 0.55; cursor: progress; }
+
+.rw-wrap {
+  width: min(1040px, calc(100% - 28px));
+  margin: 0 auto;
+  padding: 36px 0 12px;
+}
+
+.rw-hero-block, .rw-intro { position: relative; text-align: center; }
+
+.rw-hero-block::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -40px;
+  z-index: -1;
+  width: min(640px, 100%);
+  height: 280px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.45), transparent 68%);
+  pointer-events: none;
+}
+
+.rw-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 6px 12px;
+  border: 1px solid rgba(196, 181, 253, 0.35);
+  border-radius: 999px;
+  background: rgba(124, 58, 237, 0.16);
+  color: var(--violet-2);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.rw-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ddd6fe;
+  box-shadow: 0 0 10px #ddd6fe;
+}
+
+.rw-hero-block h1,
+.rw-intro h1,
+.rw-empty h1 {
+  margin: 16px auto 0;
+  max-width: 12em;
+  font-size: clamp(32px, 8vw, 64px);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.rw-lede {
+  margin: 12px auto 0;
+  max-width: 36rem;
+  color: var(--soft);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.rw-kicker {
+  margin: 0;
+  color: var(--violet-2);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rw-stage-panel { max-width: 640px; margin: 26px auto 0; }
+
+.rw-form-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
+
+.rw-form input {
+  width: 100%;
+  min-height: 48px;
+  min-width: 0;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #09080f;
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+}
+
+.rw-form input::placeholder { color: #7c7590; }
+.rw-form input:focus { outline: 2px solid #a78bfa; outline-offset: 1px; }
+
+.rw-status, .rw-hint, .rw-error {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: center;
+}
+.rw-hint, .rw-status { color: var(--muted); }
+.rw-error { color: var(--fail); }
+
+.rw-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.rw-quick {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.rw-chip {
+  min-height: 36px;
+  max-width: 100%;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--soft);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.rw-chip:hover { border-color: rgba(196, 181, 253, 0.55); color: #fff; }
+
+.rw-board { margin-top: 36px; }
+
+.rw-window {
+  overflow: hidden;
+  border: 1px solid rgba(196, 181, 253, 0.22);
+  border-radius: 18px;
+  background:
+    radial-gradient(420px 180px at 85% 0%, rgba(124, 58, 237, 0.28), transparent 60%),
+    #100e18;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.rw-window-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.rw-window-bar span { width: 8px; height: 8px; border-radius: 50%; background: #3c3550; flex: none; }
+.rw-window-bar em {
+  margin-left: 6px;
+  color: var(--muted);
+  font-style: normal;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rw-window-grid { display: grid; }
+.rw-window-grid aside { padding: 14px; border-bottom: 1px solid var(--line); }
+.rw-window-grid aside p {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.rw-window-grid ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rw-window-grid li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--soft);
+  font-size: 13px;
+  font-weight: 600;
+}
+.rw-window-grid i { width: 8px; height: 8px; border-radius: 50%; background: var(--pass); flex: none; }
+.rw-window-grid i.is-mid { background: var(--warn); }
+.rw-window-grid i.is-bad { background: var(--fail); }
+
+.rw-window-main { padding: 16px; }
+.rw-mini-score strong {
+  display: block;
+  font-size: clamp(42px, 10vw, 64px);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+}
+.rw-mini-score span { color: var(--muted); font-size: 13px; font-weight: 600; }
+.rw-bars { display: grid; gap: 8px; margin-top: 14px; }
+.rw-bars div { height: 8px; overflow: hidden; border-radius: 999px; background: rgba(255, 255, 255, 0.06); }
+.rw-bars b { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #6d28d9, #ddd6fe); }
+.rw-mini-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+.rw-mini-stats article { padding: 10px 8px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); text-align: center; }
+.rw-mini-stats span { display: block; color: var(--muted); font-size: 11px; font-weight: 700; }
+.rw-mini-stats strong { font-size: clamp(16px, 4vw, 22px); }
+
+.rw-checks { margin-top: 48px; }
+.rw-section-head { text-align: center; }
+.rw-section-head h2, .rw-block h2 {
+  margin: 0;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+}
+.rw-section-head p { margin: 8px auto 0; max-width: 34rem; color: var(--muted); font-size: 15px; }
+
+.rw-check-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+.rw-check-grid li {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+}
+.rw-check-grid span { color: var(--violet-2); font-size: 12px; font-weight: 800; }
+.rw-check-grid strong { display: block; margin-top: 8px; font-size: 15px; }
+.rw-check-grid p { margin: 4px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+
+.rw-footer { margin-top: 36px; }
+.rw-footer .rw-bar { width: min(1040px, calc(100% - 28px)); }
+.rw-footer p {
+  margin: 0;
+  padding: 16px 0 28px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.rw-empty { margin-top: 12px; text-align: center; }
+.rw-empty p { color: var(--soft); }
+.rw-history { margin-top: 20px; text-align: left; }
+.rw-history-list {
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+}
+.rw-history-item {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 4px 12px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+.rw-history-item:hover { background: rgba(255, 255, 255, 0.04); }
+.rw-score-pill {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(124, 58, 237, 0.28);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+}
+.rw-history-item strong { display: block; font-size: 15px; }
+.rw-history-item small { display: block; color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+.rw-history-item .rw-tag { grid-column: 2; }
+.rw-tag { font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
+.rw-tag-pass { color: var(--pass); }
+.rw-tag-warning { color: var(--warn); }
+.rw-tag-error { color: var(--fail); }
+
+.rw-report { display: flex; flex-direction: column; gap: 22px; }
+.rw-report > div:first-child { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.rw-report h1 {
+  margin: 4px 0 0;
+  font-size: clamp(28px, 6vw, 46px);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+.rw-back { color: var(--violet-2); font-size: 14px; font-weight: 600; text-decoration: none; }
+.rw-hero {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 18px 14px;
+  text-align: center;
+  border: 1px solid rgba(196, 181, 253, 0.22);
+  border-radius: 18px;
+  background:
+    radial-gradient(380px 140px at 50% 0%, rgba(124, 58, 237, 0.32), transparent 70%),
+    #100e18;
+}
+.rw-gauge { width: min(160px, 52vw); height: auto; }
+.rw-gauge-track { fill: none; stroke: rgba(255, 255, 255, 0.08); stroke-width: 8; }
+.rw-gauge-value {
+  fill: none;
+  stroke: #c4b5fd;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 60px 60px;
+}
+.rw-gauge-warning .rw-gauge-value { stroke: var(--warn); }
+.rw-gauge-error .rw-gauge-value { stroke: var(--fail); }
+.rw-gauge text { fill: #fff; font-family: var(--font); font-size: 28px; font-weight: 700; text-anchor: middle; }
+.rw-grade { margin: 0; color: var(--violet-2); font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+.rw-host { color: #ddd6fe; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.rw-meta-line { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+.rw-sample { color: var(--violet-2); font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.rw-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; width: 100%; margin: 12px 0 0; }
+.rw-stat { min-width: 0; padding: 12px 8px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); }
+.rw-stat span { display: block; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.rw-stat strong { display: block; margin-top: 2px; font-size: 24px; font-weight: 700; }
+
+.rw-block h2 { text-align: center; }
+.rw-rec-list, .rw-check-list, .rw-snap-grid { display: grid; gap: 10px; margin: 12px 0 0; padding: 0; list-style: none; }
+.rw-rec, .rw-snap, .rw-check {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+}
+.rw-rec { border-left: 3px solid var(--warn); }
+.rw-rec-error { border-left-color: var(--fail); }
+.rw-rec p, .rw-check p, .rw-snap p { margin: 6px 0 0; color: var(--soft); font-size: 14px; overflow-wrap: anywhere; }
+.rw-pass-note { padding: 14px; border-radius: 16px; background: rgba(94, 224, 160, 0.1); color: var(--pass); }
+.rw-check summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.rw-check summary span:last-child { flex: none; text-align: right; }
+.rw-check summary::-webkit-details-marker { display: none; }
+.rw-check-pass { box-shadow: inset 3px 0 0 var(--pass); }
+.rw-check-warning { box-shadow: inset 3px 0 0 var(--warn); }
+.rw-check-error { box-shadow: inset 3px 0 0 var(--fail); }
+.rw-items { margin: 10px 0 0; padding: 0; list-style: none; }
+.rw-items li { display: grid; gap: 2px; padding: 8px 0; border-top: 1px solid var(--line); font-size: 13px; }
+.rw-items span { color: var(--muted); }
+.rw-items b { font-weight: 600; overflow-wrap: anywhere; }
+
+.rw-spin {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  animation: rw-spin 0.7s linear infinite;
+}
+@keyframes rw-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 719px) {
+  .rw-cta { display: none; }
+  .rw-nav a { padding: 0 8px; font-size: 13px; }
+}
+
+@media (min-width: 560px) {
+  .rw-check-grid, .rw-snap-grid { grid-template-columns: 1fr 1fr; }
+  .rw-history-item { grid-template-columns: 48px minmax(0, 1fr) auto; }
+  .rw-history-item .rw-tag { grid-column: auto; }
+  .rw-items li { grid-template-columns: 8.5rem minmax(0, 1fr); gap: 8px; }
+}
+
+@media (min-width: 720px) {
+  .rw-mount { width: min(1180px, calc(100% - 32px)); margin: 16px auto; border-radius: 28px; }
+  .rw-header .rw-bar { display: grid; grid-template-columns: 1fr auto 1fr; }
+  .rw-nav { justify-self: center; }
+  .rw-cta { justify-self: end; width: auto; }
+  .rw-form-row { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+  .rw-btn { width: auto; min-width: 132px; }
+  .rw-window-grid { grid-template-columns: 240px minmax(0, 1fr); }
+  .rw-window-grid aside { border-bottom: 0; border-right: 1px solid var(--line); }
+  .rw-window-grid ul { grid-template-columns: 1fr; }
+  .rw-window-main { padding: 24px; }
+  .rw-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .rw-hero {
+    grid-template-columns: 190px minmax(0, 1fr);
+    justify-items: start;
+    align-items: center;
+    text-align: left;
+    padding: 26px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .rw-check-grid, .rw-snap-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .rw-wrap { padding-top: 56px; }
+}
+
+@media (max-width: 359px) {
+  .rw-brand span { display: none; }
+  .rw-mount { width: calc(100% - 8px); margin: 4px auto; border-radius: 14px; }
+  .rw-bar, .rw-wrap, .rw-footer .rw-bar { width: calc(100% - 20px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rw-spin { animation: none; }
+}
+
+  </style>
+</head>
+<body>
+  <div class="rw-mount" id="app">
+    <header class="rw-header">
+      <div class="rw-bar">
+        <a class="rw-brand" href="index.html">
+          <svg class="rw-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <rect x="1" y="1" width="30" height="30" rx="9"></rect>
+            <path d="M7 25V18h4.5v7H7zm6.75 0V12h4.5v13h-4.5zm6.75 0V7H25v18h-4.5z"></path>
+          </svg>
+          <span>Rank Wise</span>
+        </a>
+        <nav class="rw-nav" aria-label="Primary">
+          <a href="index.html" aria-current="page">Audit</a>
+          <a href="history.html">History</a>
+        </nav>
+        <a class="rw-cta" href="index.html#audit-form">New audit</a>
+      </div>
+    </header>
+
+    <main class="rw-wrap rw-home">
+      <section class="rw-hero-block">
+        <p class="rw-badge"><span class="rw-dot"></span> On-page SEO audit</p>
+        <h1>See the score behind the page.</h1>
+        <p class="rw-lede">Paste a public URL. Rank Wise checks the title, meta description, headings, images, links, URL structure, robots.txt and sitemap, then shows what to fix.</p>
+        <div class="rw-stage-panel">
+          <form id="audit-form" class="rw-form" novalidate>
+            <label class="rw-sr" for="audit-url">Website URL</label>
+            <div class="rw-form-row">
+              <input id="audit-url" name="url" type="text" inputmode="url" autocomplete="url" placeholder="https://example.com" spellcheck="false" />
+              <button id="audit-submit" class="rw-btn" type="submit">Run audit</button>
+            </div>
+            <p id="audit-status" class="rw-status" aria-live="polite"></p>
+            <p id="audit-error" class="rw-error" role="alert" hidden></p>
+            <p id="audit-hint" class="rw-hint">Public pages only. Invalid URLs come back with a clear message.</p>
+          </form>
+          <div class="rw-quick">
+            <button type="button" class="rw-chip" data-url="example.com">example.com</button>
+            <button type="button" class="rw-chip" data-url="wikipedia.org">wikipedia.org</button>
+            <button type="button" class="rw-chip" data-url="developer.mozilla.org">developer.mozilla.org</button>
+            <button type="button" class="rw-chip" id="sample-audit">Sample report</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="rw-board" aria-label="What a report looks like">
+        <div class="rw-window">
+          <div class="rw-window-bar">
+            <span></span><span></span><span></span>
+            <em>Preview layout</em>
+          </div>
+          <div class="rw-window-grid">
+            <aside>
+              <p>Checks</p>
+              <ul>
+                <li><i class="is-ok"></i> Title</li>
+                <li><i class="is-ok"></i> Meta</li>
+                <li><i class="is-mid"></i> Headings</li>
+                <li><i class="is-mid"></i> Images</li>
+                <li><i class="is-ok"></i> Links</li>
+                <li><i class="is-ok"></i> URL</li>
+                <li><i class="is-bad"></i> robots.txt</li>
+                <li><i class="is-ok"></i> Sitemap</li>
+              </ul>
+            </aside>
+            <div class="rw-window-main">
+              <div class="rw-mini-score">
+                <strong>86</strong>
+                <span>Page score</span>
+              </div>
+              <div class="rw-bars" aria-hidden="true">
+                <div><b style="width:92%"></b></div>
+                <div><b style="width:74%"></b></div>
+                <div><b style="width:61%"></b></div>
+                <div><b style="width:48%"></b></div>
+              </div>
+              <div class="rw-mini-stats">
+                <article><span>Passed</span><strong>5</strong></article>
+                <article><span>Warnings</span><strong>2</strong></article>
+                <article><span>Errors</span><strong>1</strong></article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rw-checks" aria-labelledby="checks-title">
+        <div class="rw-section-head">
+          <h2 id="checks-title">Eight checks. One page.</h2>
+          <p>Not a ranking prediction, and not a crawl of the whole site.</p>
+        </div>
+        <ol class="rw-check-grid">
+          <li><span>01</span><strong>Page title</strong><p>Present, and about 30–60 characters.</p></li>
+          <li><span>02</span><strong>Meta description</strong><p>A summary of about 70–160 characters.</p></li>
+          <li><span>03</span><strong>Headings</strong><p>One H1, then H2 and H3 in order.</p></li>
+          <li><span>04</span><strong>Image alt text</strong><p>Meaningful images should describe themselves.</p></li>
+          <li><span>05</span><strong>Links</strong><p>Internal and external links, counted apart.</p></li>
+          <li><span>06</span><strong>URL structure</strong><p>HTTPS, a real domain, and a tidy path.</p></li>
+          <li><span>07</span><strong>robots.txt</strong><p>The crawl file at the site root.</p></li>
+          <li><span>08</span><strong>sitemap.xml</strong><p>A list of important pages, if it exists.</p></li>
+        </ol>
+      </section>
+    </main>
+
+    <div id="report-root" hidden></div>
+
+    <footer class="rw-footer">
+      <div class="rw-bar">
+        <p>Rank Wise checks one public page at a time. The score is an assessment of those checks. It does not predict search rankings.</p>
+      </div>
+    </footer>
+  </div>
+  <script>
+    window.RANK_WISE_API = window.RANK_WISE_API || "http://127.0.0.1:5000";
+  </script>
+  <script>
+(function () {
+  "use strict";
+
+  var API = (window.RANK_WISE_API || "http://127.0.0.1:5000").replace(/\/$/, "");
+  var HISTORY_KEY = "rank_wise_history_v1";
+
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function hostOf(url) {
+    try {
+      return new URL(url).hostname;
+    } catch (e) {
+      return url || "unknown";
+    }
+  }
+
+  function when(iso) {
+    try {
+      return new Date(iso).toLocaleString();
+    } catch (e) {
+      return iso || "";
+    }
+  }
+
+  function normalizeUrl(raw) {
+    var u = String(raw || "").trim();
+    if (!u) return "";
+    if (!/^https?:\/\//i.test(u)) u = "https://" + u;
+    return u;
+  }
+
+  function loadLocalHistory() {
+    try {
+      var raw = localStorage.getItem(HISTORY_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveLocalHistory(list) {
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 50)));
+    } catch (e) {}
+  }
+
+  function pushLocal(audit) {
+    var list = loadLocalHistory().filter(function (a) {
+      return a.id !== audit.id;
+    });
+    list.unshift({
+      id: audit.id,
+      url: audit.url,
+      fetchedUrl: audit.fetchedUrl,
+      score: audit.score,
+      status: audit.status,
+      grade: audit.grade,
+      analyzedAt: audit.analyzedAt,
+      sample: !!audit.sample,
+    });
+    saveLocalHistory(list);
+  }
+
+  function sampleAudit() {
+    return {
+      id: "sample-" + Date.now(),
+      sample: true,
+      url: "https://example.com",
+      fetchedUrl: "https://example.com/",
+      statusCode: 200,
+      fetchMs: 120,
+      analyzedAt: new Date().toISOString(),
+      score: 86,
+      grade: "Excellent",
+      status: "warning",
+      passed: 5,
+      warnings: 2,
+      errors: 1,
+      page: {
+        title: "Example Domain",
+        h1Count: 1,
+        h2Count: 0,
+        h3Count: 0,
+        imageCount: 0,
+        missingAltCount: 0,
+        internalLinks: 0,
+        externalLinks: 1,
+        robotsFound: false,
+        sitemapFound: true,
+      },
+      recommendations: [
+        {
+          priority: "error",
+          title: "Add a robots.txt file",
+          body: "Publish robots.txt at the site root so crawlers know what they may fetch.",
+        },
+        {
+          priority: "warning",
+          title: "Add more heading structure",
+          body: "Use H2 and H3 sections under the main H1 so the page outline is clearer.",
+        },
+      ],
+      checks: [
+        {
+          id: "title",
+          title: "Page title",
+          status: "pass",
+          score: 15,
+          maxScore: 15,
+          summary: "Title is present and a good length.",
+          why: "Search results use the title tag as the main link text.",
+          recommendation: "",
+          items: [{ label: "Title", value: "Example Domain" }, { label: "Length", value: "14 characters" }],
+        },
+        {
+          id: "meta",
+          title: "Meta description",
+          status: "pass",
+          score: 15,
+          maxScore: 15,
+          summary: "Meta description is present.",
+          why: "A clear summary helps searchers decide to open the page.",
+          recommendation: "",
+          items: [{ label: "Length", value: "About 120 characters" }],
+        },
+        {
+          id: "headings",
+          title: "Headings",
+          status: "warning",
+          score: 10,
+          maxScore: 15,
+          summary: "One H1 is present, but H2 and H3 are missing.",
+          why: "Headings outline the page for people and for crawlers.",
+          recommendation: "Add section headings under the main H1.",
+          items: [
+            { label: "H1", value: "1" },
+            { label: "H2", value: "0" },
+            { label: "H3", value: "0" },
+          ],
+        },
+        {
+          id: "images",
+          title: "Image alt text",
+          status: "pass",
+          score: 15,
+          maxScore: 15,
+          summary: "No images found on this sample page.",
+          why: "Alt text describes images when they cannot be seen.",
+          recommendation: "",
+          items: [{ label: "Images", value: "0" }],
+        },
+        {
+          id: "links",
+          title: "Links",
+          status: "pass",
+          score: 10,
+          maxScore: 10,
+          summary: "External links were counted.",
+          why: "Internal and external links show how the page connects to the web.",
+          recommendation: "",
+          items: [
+            { label: "Internal", value: "0" },
+            { label: "External", value: "1" },
+          ],
+        },
+        {
+          id: "url",
+          title: "URL structure",
+          status: "pass",
+          score: 10,
+          maxScore: 10,
+          summary: "HTTPS with a clear domain.",
+          why: "A clean, secure URL is easier to share and trust.",
+          recommendation: "",
+          items: [{ label: "Scheme", value: "https" }],
+        },
+        {
+          id: "robots",
+          title: "robots.txt",
+          status: "error",
+          score: 0,
+          maxScore: 10,
+          summary: "robots.txt was not found at the site root.",
+          why: "Crawlers look for robots.txt to learn crawl rules.",
+          recommendation: "Publish a robots.txt file at https://example.com/robots.txt",
+          items: [{ label: "Found", value: "No" }],
+        },
+        {
+          id: "sitemap",
+          title: "sitemap.xml",
+          status: "pass",
+          score: 11,
+          maxScore: 10,
+          summary: "A sitemap is available in this sample.",
+          why: "A sitemap lists important pages for discovery.",
+          recommendation: "",
+          items: [{ label: "Found", value: "Yes" }],
+        },
+      ],
+    };
+  }
+
+  function gauge(score, grade, status) {
+    var radius = 52;
+    var circ = 2 * Math.PI * radius;
+    var dash = (Math.max(0, Math.min(100, Number(score) || 0)) / 100) * circ;
+    return (
+      '<div class="rw-gauge-wrap"><svg class="rw-gauge rw-gauge-' +
+      esc(status || "warning") +
+      '" viewBox="0 0 120 120" role="img" aria-label="Score ' +
+      esc(score) +
+      " out of 100, " +
+      esc(grade) +
+      '"><circle class="rw-gauge-track" cx="60" cy="60" r="52"></circle><circle class="rw-gauge-value" cx="60" cy="60" r="52" stroke-dasharray="' +
+      dash.toFixed(1) +
+      " " +
+      circ.toFixed(1) +
+      '"></circle><text x="60" y="68">' +
+      esc(score) +
+      "</text></svg></div>"
+    );
+  }
+
+  function reportHtml(audit) {
+    var host = hostOf(audit.fetchedUrl || audit.url);
+    var recs = audit.recommendations || [];
+    var page = audit.page || {};
+    var recBlock = recs.length
+      ? '<section class="rw-block"><h2>Recommendations</h2><ol class="rw-rec-list">' +
+        recs
+          .map(function (item, index) {
+            return (
+              '<li class="rw-rec rw-rec-' +
+              esc(item.priority) +
+              '"><p class="rw-kicker">' +
+              String(index + 1).padStart(2, "0") +
+              " · " +
+              esc(item.priority) +
+              "</p><strong>" +
+              esc(item.title) +
+              "</strong><p>" +
+              esc(item.body) +
+              "</p></li>"
+            );
+          })
+          .join("") +
+        "</ol></section>"
+      : '<p class="rw-pass-note">This page passed the selected checks. Keep titles unique as the site grows.</p>';
+
+    var checks = (audit.checks || [])
+      .map(function (check) {
+        var items = (check.items || [])
+          .map(function (item) {
+            return "<li><span>" + esc(item.label) + "</span><b>" + esc(item.value) + "</b></li>";
+          })
+          .join("");
+        return (
+          '<details class="rw-check rw-check-' +
+          esc(check.status) +
+          '"><summary><span>' +
+          esc(check.title) +
+          '</span><span class="rw-tag rw-tag-' +
+          esc(check.status) +
+          '">' +
+          esc(check.status) +
+          " · " +
+          esc(check.score) +
+          "/" +
+          esc(check.maxScore) +
+          "</span></summary><p>" +
+          esc(check.summary) +
+          "</p><p>" +
+          esc(check.why) +
+          "</p>" +
+          (check.recommendation ? "<p><strong>Next step. </strong>" + esc(check.recommendation) + "</p>" : "") +
+          (items ? '<ul class="rw-items">' + items + "</ul>" : "") +
+          "</details>"
+        );
+      })
+      .join("");
+
+    return (
+      '<main class="rw-wrap rw-report"><div><a class="rw-back" href="index.html">← New audit</a>' +
+      (audit.sample ? '<span class="rw-sample">Sample report</span>' : "") +
+      '</div><section class="rw-hero">' +
+      gauge(audit.score, audit.grade, audit.status) +
+      '<div><p class="rw-kicker">Audited site</p><h1>' +
+      esc(host) +
+      '</h1><a class="rw-host" href="' +
+      esc(audit.fetchedUrl) +
+      '" target="_blank" rel="noreferrer">' +
+      esc(audit.fetchedUrl) +
+      '</a><p class="rw-grade">' +
+      esc(audit.grade) +
+      '</p><dl class="rw-stats"><div class="rw-stat"><span>Passed</span><strong class="rw-tag-pass">' +
+      esc(audit.passed) +
+      '</strong></div><div class="rw-stat"><span>Warnings</span><strong class="rw-tag-warning">' +
+      esc(audit.warnings) +
+      '</strong></div><div class="rw-stat"><span>Errors</span><strong class="rw-tag-error">' +
+      esc(audit.errors) +
+      '</strong></div><div class="rw-stat"><span>HTTP</span><strong>' +
+      esc(audit.statusCode) +
+      '</strong></div></dl><p class="rw-meta-line">' +
+      esc(when(audit.analyzedAt)) +
+      " · Fetched in " +
+      esc(audit.fetchMs) +
+      " ms</p></div></section>" +
+      recBlock +
+      '<section class="rw-block"><h2>Page snapshot</h2><div class="rw-snap-grid"><article class="rw-snap"><p class="rw-kicker">Title</p><p>' +
+      esc(page.title || "Missing") +
+      '</p></article><article class="rw-snap"><p class="rw-kicker">Headings</p><p>H1 ' +
+      esc(page.h1Count) +
+      " · H2 " +
+      esc(page.h2Count) +
+      " · H3 " +
+      esc(page.h3Count) +
+      '</p></article><article class="rw-snap"><p class="rw-kicker">Images</p><p>' +
+      esc(page.imageCount) +
+      " total · " +
+      esc(page.missingAltCount) +
+      ' missing alt</p></article><article class="rw-snap"><p class="rw-kicker">Links</p><p>' +
+      esc(page.internalLinks) +
+      " internal · " +
+      esc(page.externalLinks) +
+      ' external</p></article><article class="rw-snap"><p class="rw-kicker">Technical files</p><p>robots.txt ' +
+      (page.robotsFound ? "found" : "missing") +
+      " · sitemap " +
+      (page.sitemapFound ? "found" : "missing") +
+      "</p></article></div></section>" +
+      '<section class="rw-block"><h2>Individual checks</h2><div class="rw-check-list">' +
+      checks +
+      "</div></section></main>"
+    );
+  }
+
+  function showReport(audit) {
+    pushLocal(audit);
+    var home = document.querySelector(".rw-home");
+    var footer = document.querySelector(".rw-footer");
+    var root = document.getElementById("report-root");
+    if (home) home.hidden = true;
+    if (footer) footer.hidden = true;
+    if (root) {
+      root.hidden = false;
+      root.innerHTML = reportHtml(audit);
+      window.scrollTo(0, 0);
+    }
+  }
+
+  function setBusy(busy) {
+    var submit = document.getElementById("audit-submit");
+    var chips = document.querySelectorAll(".rw-chip");
+    if (submit) {
+      submit.disabled = !!busy;
+      submit.innerHTML = busy
+        ? '<span class="rw-spin" aria-hidden="true"></span> Auditing'
+        : "Run audit";
+    }
+    chips.forEach(function (c) {
+      c.disabled = !!busy;
+    });
+  }
+
+  function setError(msg) {
+    var el = document.getElementById("audit-error");
+    var st = document.getElementById("audit-status");
+    if (st) st.textContent = "";
+    if (el) {
+      if (msg) {
+        el.hidden = false;
+        el.textContent = msg;
+      } else {
+        el.hidden = true;
+        el.textContent = "";
+      }
+    }
+  }
+
+  function setStatus(msg) {
+    var st = document.getElementById("audit-status");
+    if (st) st.textContent = msg || "";
+  }
+
+  async function runAudit(url, sample) {
+    setError("");
+    setBusy(true);
+    setStatus(sample ? "Building sample report…" : "Fetching and analysing the page…");
+    try {
+      if (sample) {
+        var s = sampleAudit();
+        showReport(s);
+        return;
+      }
+      var res = await fetch(API + "/api/audit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: url }),
+      });
+      var data = await res.json().catch(function () {
+        return {};
+      });
+      if (!res.ok) {
+        throw new Error(data.error || "Audit failed (" + res.status + "). Is the Flask backend running?");
+      }
+      showReport(data);
+    } catch (err) {
+      setError(
+        err && err.message
+          ? err.message
+          : "Could not reach the API. Start the Flask backend (see README) or try Sample report."
+      );
+    } finally {
+      setBusy(false);
+      setStatus("");
+    }
+  }
+
+  function bindHome() {
+    var form = document.getElementById("audit-form");
+    if (!form) return;
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var input = document.getElementById("audit-url");
+      var raw = input ? input.value : "";
+      var url = normalizeUrl(raw);
+      if (!url) {
+        setError("Enter a website URL, for example https://example.com");
+        return;
+      }
+      try {
+        new URL(url);
+      } catch (err) {
+        setError("That does not look like a valid URL.");
+        return;
+      }
+      runAudit(url, false);
+    });
+
+    document.querySelectorAll(".rw-chip[data-url]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var input = document.getElementById("audit-url");
+        if (input) input.value = btn.getAttribute("data-url") || "";
+        runAudit(normalizeUrl(btn.getAttribute("data-url")), false);
+      });
+    });
+
+    var sample = document.getElementById("sample-audit");
+    if (sample) {
+      sample.addEventListener("click", function () {
+        runAudit("", true);
+      });
+    }
+
+    var params = new URLSearchParams(window.location.search);
+    var id = params.get("id");
+    if (id) {
+      openStored(id);
+    }
+  }
+
+  function openStored(id) {
+    var list = loadLocalHistory();
+    var hit = list.find(function (a) {
+      return a.id === id;
+    });
+    if (!hit) {
+      fetch(API + "/api/audit/" + encodeURIComponent(id))
+        .then(function (r) {
+          return r.ok ? r.json() : null;
+        })
+        .then(function (data) {
+          if (data) showReport(data);
+        })
+        .catch(function () {});
+      return;
+    }
+    if (hit.sample || !hit.checks) {
+      if (hit.sample) showReport(sampleAudit());
+      else {
+        fetch(API + "/api/audit/" + encodeURIComponent(id))
+          .then(function (r) {
+            return r.ok ? r.json() : null;
+          })
+          .then(function (data) {
+            if (data) showReport(data);
+          });
+      }
+    } else {
+      showReport(hit);
+    }
+  }
+
+  async function bindHistory() {
+    var root = document.getElementById("history-root");
+    if (!root) return;
+
+    var local = loadLocalHistory();
+    var remote = [];
+    try {
+      var res = await fetch(API + "/api/history");
+      if (res.ok) remote = await res.json();
+    } catch (e) {}
+
+    var map = {};
+    remote.concat(local).forEach(function (a) {
+      if (a && a.id) map[a.id] = a;
+    });
+    var items = Object.keys(map)
+      .map(function (k) {
+        return map[k];
+      })
+      .sort(function (a, b) {
+        return String(b.analyzedAt || "").localeCompare(String(a.analyzedAt || ""));
+      });
+
+    if (!items.length) {
+      root.innerHTML =
+        '<div class="rw-empty"><h1>No audits yet</h1><p>Run an audit on the home page. Reports are kept in this browser and on the server when the API is available.</p><p><a class="rw-btn" href="index.html">New audit</a></p></div>';
+      return;
+    }
+
+    root.innerHTML =
+      '<ul class="rw-history-list">' +
+      items
+        .map(function (a) {
+          return (
+            '<li><a class="rw-history-item" href="index.html?id=' +
+            encodeURIComponent(a.id) +
+            '"><span class="rw-score-pill">' +
+            esc(a.score) +
+            '</span><span><strong>' +
+            esc(hostOf(a.fetchedUrl || a.url)) +
+            "</strong><small>" +
+            esc(when(a.analyzedAt)) +
+            '</small></span><span class="rw-tag rw-tag-' +
+            esc(a.status || "warning") +
+            '">' +
+            esc(a.status || "saved") +
+            "</span></a></li>"
+          );
+        })
+        .join("") +
+      "</ul>";
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    if (document.getElementById("audit-form")) bindHome();
+    if (document.getElementById("history-root")) bindHistory();
+  });
+})();
+
+  </script>
+</body>
+</html>

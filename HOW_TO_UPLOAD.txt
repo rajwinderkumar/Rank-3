@@ -1,0 +1,26 @@
+Rank Wise - ALL FILES (no folders)
+=================================
+
+THIS PROJECT HAS 11 FILES, NOT 374.
+374 would only appear if node_modules or build cache was included.
+Those are not needed for GitHub Pages.
+
+UPLOAD TO GITHUB PAGES (only these 3):
+  1. index.html
+  2. history.html
+  3. favicon.svg
+
+Put them in the ROOT of repo Rank-Wise (not inside a folder).
+Commit to main. Open:
+  https://rajwinderkumar.github.io/Rank-Wise/
+
+CSS and JS are already inside index.html and history.html.
+
+OTHER FILES (optional):
+  rankwise.css, rankwise.js  - same styles/scripts as separate files
+  app.py, requirements.txt, run_audit.py, seo_init.py - Flask backend
+  README.md - documentation
+
+Flask backend needs a normal folder structure to run; use the backend
+files only if you deploy API on Render / a server. GitHub Pages is
+static only (HTML/CSS/JS).
